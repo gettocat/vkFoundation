@@ -167,9 +167,8 @@ Class vkAttach {
             vkLog::log("upload response: " . print_r($serverAnswer, true));
             vkLog::log("upload response decoded: " . print_r($PicSettings, true));
 
-            //$PicSettings = json_decode("{" . $arr[1] . "}", true); //еблан.
             $pic = $this->access->getApi()->api('photos.saveWallPhoto', array('access_token' => $this->access->getToken(), 'server' => $PicSettings['server'], 'photo' => $PicSettings['photo'], 'hash' => $PicSettings['hash'], 'group_id' => $this->access->getGroupId()));
-            //zlog("save uploaded photo be method photos.saveWallPhoto - server-{$PicSettings['server']}, photo-{$PicSettings['photo']}, hash-{$PicSettings['hash']}");
+            
             if ($pic['error']) {
                 $this->error = print_r($pic, true) . ' in method photos.saveWallPhoto';
                 vkLog::log("photos.saveWallPhoto error $this->error");
@@ -177,11 +176,6 @@ Class vkAttach {
 
             $this->uploaded_data = $pic["response"][0]; //owner_id, id, photo_604
             $this->uploaded_data['type'] = 'photo';
-
-            /* if ($this->data['caption'] && !$this->error) {
-              $save = $this->access->getApi()->api('photos.edit', array('access_token' => $this->access->getToken(), 'owner_id' => $this->uploaded_data['owner_id'], 'photo_id' => $this->uploaded_data['id'], 'caption' => $this->data['caption']));
-              d($save);
-              } */
 
             if (!$this->error)
                 return true;
@@ -256,7 +250,7 @@ Class vkAttach {
                 vkLog::log("error in connection to server {$m[1]}.vk.com");
             }
 
-            $PicSettings = json_decode($serverAnswer, true); //еблан.
+            $PicSettings = json_decode($serverAnswer, true); 
             if ($PicSettings['error']) {
                 $this->error = $PicSettings['error'] . ' in method video.save to server';
                 vkLog::log("video.save error $this->error");
@@ -291,7 +285,7 @@ Class vkAttach {
                 vkLog::log("error in connection to server {$m[1]}.vk.com");
             }
 
-            $PicSettings = json_decode($serverAnswer, true); //еблан.
+            $PicSettings = json_decode($serverAnswer, true); 
             $a = array('access_token' => $this->access->getToken(), 'file' => $PicSettings['file'], 'title' => $this->filename);
 
             if ($this->data['title'])
@@ -336,7 +330,7 @@ Class vkAttach {
                 vkLog::log("error in connection to server {$m[1]}.vk.com");
             }
 
-            $PicSettings = json_decode($serverAnswer, true); //еблан.
+            $PicSettings = json_decode($serverAnswer, true);
             $a = array('access_token' => $this->access->getToken(), 'server' => $PicSettings['server'], 'audio' => $PicSettings['audio'], 'hash' => $PicSettings['hash']);
 
             if ($this->data['audio_title'])
@@ -346,7 +340,7 @@ Class vkAttach {
                 $a['artist'] = $this->data['audio_artist'];
 
             $pic = $this->access->getApi()->api('audio.save', $a);
-            //zlog("save uploaded photo be method photos.saveWallPhoto - server-{$PicSettings['server']}, photo-{$PicSettings['photo']}, hash-{$PicSettings['hash']}");
+            
             if ($pic['error'])
                 $this->error = $resp ['error']['error_msg'] . ' in method audio.save';
             vkLog::log("photos.saveWallPhoto error $this->error");
